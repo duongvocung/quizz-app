@@ -5,6 +5,8 @@ import App from './App';
 import reportWebVitals from './reportWebVitals';
 import 'antd/dist/antd.css'
 import { BrowserRouter } from 'react-router-dom';
+import './api/config'
+import './api/api-config'
 
 ReactDOM.render(
   <React.StrictMode>

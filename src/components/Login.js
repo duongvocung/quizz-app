@@ -3,19 +3,23 @@ import axios from 'axios'
 // import {} from "axios"
 import React from 'react'
 import { Link,NavLink,useNavigate } from 'react-router-dom'
+import { authLogin } from '../api/api';
 
 function Login() {
     let navigator = useNavigate();
 
     const onFinish = async(prams) => {
-        console.log(prams)
-        // let data;
-        try {
-           axios.post('https://fwa-ec-quiz.herokuapp.com/v1/auth/login',prams)
-           console.log('first')
-        } catch (error) {
-            console.log('aaa')
-        }
+      const {success, data} = await authLogin(prams)
+      if(success) {
+        console.log(data);
+        const tokens = data.tokens
+        localStorage.setItem('token', tokens.access.token)
+        localStorage.setItem('tokenRefresh', tokens.refresh.token)
+        localStorage.setItem('expires', tokens.access.expires)
+        navigator('/doquiz')
+      }else{
+        alert(data)
+      }
     }
     const onFinishFailed = () => {}
   return (
@@ -44,10 +48,7 @@ function Login() {
       <Input.Password />
     </Form.Item>
 
-    <Form.Item name="remember" valuePropName="checked" wrapperCol={{ offset: 8, span: 8 }}>
-      <Checkbox>Remember me</Checkbox>
-    </Form.Item>
-
+   
     <Form.Item wrapperCol={{ offset: 8, span: 8 }}>
       <Button type="primary" htmlType="submit">
         Submit
