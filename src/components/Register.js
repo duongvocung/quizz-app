@@ -3,6 +3,7 @@ import axios from 'axios'
 import React from 'react'
 import _ from 'lodash';
 import { Link, useNavigate  } from "react-router-dom";
+import { authRegister } from '../api/api';
 
 
 
@@ -13,17 +14,9 @@ function Register() {
 
     const onFinish = async(payload) => {
         const params = _.pick(payload, ['username', 'password','email']);
-
+        await authRegister(params)
         console.log(params);
-        try {
-            axios.post('https://fwa-ec-quiz.herokuapp.com/v1/auth/register',params)
-            message.success('Succes fully', 3);
-            // onClick={() => navigator("/Login")}
-            navigator('/')
-        } catch (error) {
-            console.log('bbb');
-        
-        }
+        navigator('/')
     }
     const onFinishFailed = () => {}
   return (
@@ -35,7 +28,9 @@ function Register() {
       onFinish={onFinish}
       onFinishFailed={onFinishFailed}
       autoComplete="off"
+      style={{marginTop:"50px",}}
     >
+      <h2 style={{marginLeft:"33%"}}>Register</h2>
       <Form.Item
         label="Username"
         name="username"

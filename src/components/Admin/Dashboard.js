@@ -4,17 +4,25 @@ import axios from "axios";
 import { deleteQuestionDataAdmin, getDataAdmin } from '../../api/api';
 import ModalAddAnswer from './ModalAddAnswer';
 import { useNavigate } from 'react-router-dom';
+import Header from '../Header/Header';
+
 
 function Dashboard() {
   const [dataAdmin, setDataAmin] = useState()
   const [isModalVisible,setIsModalVisible] = useState(false)
   const navigator = useNavigate()
+  const [totalQuestion, setTotalQuestion] = useState()
 
   useEffect(() => {
-    getDataAdmin().then((data)=>setDataAmin(data.data.results))
-    
+    getDataAdmin(1).then((data)=> setTotalQuestion(data.data.totalResults))
+   
+   if(totalQuestion){
+    getDataAdmin(totalQuestion).then(data => setDataAmin(data.data.results))
+   }
+   
+    // setDataAmin(data.data.results)
   })
-  console.log(dataAdmin)
+  // console.log(dataAdmin)
       
       const columns = [
         {
@@ -52,8 +60,8 @@ function Dashboard() {
           key: '7',
           render: (text, record) => (
             <Space size="middle" key={record.id}>
-              <button onClick={()=>editQuestion(record.id)}>Edit</button>
-              <button onClick={()=>deleteQuestion(record.id)}>Delete</button>
+              <button  onClick={()=>editQuestion(record.id)}>Edit</button>
+              <button  onClick={()=>deleteQuestion(record.id)}>Delete</button>
             </Space>
           ),
         },
@@ -80,8 +88,8 @@ function Dashboard() {
       }
   return (
       <>
-
-    <Button onClick={handleAddAnswer}>Add answer</Button>
+    <Header></Header>
+    <Button onClick={handleAddAnswer} type="primary" style={{float:"right", margin:"10px 15px"}}>Add answer</Button>
     <Table dataSource={dataAdmin} columns={columns} />;
     <ModalAddAnswer isModalVisible = {isModalVisible} setIsModalVisible={setIsModalVisible}  />
       </>

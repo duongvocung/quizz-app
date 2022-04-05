@@ -16,7 +16,13 @@ function Login() {
         localStorage.setItem('token', tokens.access.token)
         localStorage.setItem('tokenRefresh', tokens.refresh.token)
         localStorage.setItem('expires', tokens.access.expires)
-        navigator('/doquiz')
+        localStorage.setItem('user', data.user.username)
+        if(data.user.role === 'user'){
+          navigator('/doquiz')
+        }
+        else{
+          navigator('/admin')
+        }
       }else{
         alert(data)
       }
@@ -31,7 +37,9 @@ function Login() {
     onFinish={onFinish}
     onFinishFailed={onFinishFailed}
     autoComplete="off"
+    style={{marginTop:"60px"}}
   >
+   <h2 style={{marginLeft:"33%"}}>Login</h2>
     <Form.Item
       label="Username"
       name="username"
@@ -51,7 +59,7 @@ function Login() {
    
     <Form.Item wrapperCol={{ offset: 8, span: 8 }}>
       <Button type="primary" htmlType="submit">
-        Submit
+        Login
       </Button>
        <div>
        <a onClick={() => {navigator('/Register')} }>Register</a>
